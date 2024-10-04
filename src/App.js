@@ -22,7 +22,7 @@ const App = () => {
 
 
   const handleEdit = (id) =>{
-    const dt = data.filter(item=> item.id == id);
+    const dt = data.filter(item=> item.id === id);
     if(dt !== undefined){
       setUpdate(true);
       setId(id); 
@@ -40,23 +40,50 @@ const App = () => {
     }
   }
 
-  const handleSave = () =>{
+  const handleSave = (e) =>{
+
+    let error = "";
+    if(firstName === "" && lastName === "" && age <=0){
+      alert ("Please Enter Valid Data")
+    }
+    else if(error !== ""){
+
+      e.preventDefault();
+      const dt = [...data];
+      const newObject = {
+        id:EmployeeData.length + 1,
+        firstName:firstName,
+        lastName:lastName,
+        age :age
+      }
+      dt.push(newObject);
+      setData(dt);
+
+    }
+    else{
+      alert(error)
+    }
+
+
+
     
   }
   const handleUpdate = () =>{
-    const index = data.map((item,index)=>{
+    const index = data.map((item)=>{
       return item.id
     }).indexOf(id);
 
     const dt = [...data];
     dt[index].firstName = firstName;
     dt[index].lastName = lastName;
-    dt[index].firstName = firstName;
+    dt[index].age = age;
 
+    setData(dt);
+    handleClear()
   }
 
   const handleClear = () =>{
-    setId(0)
+    setId('')
     setFirstName("")
     setLastName("")
     setAge("")
@@ -84,7 +111,7 @@ const App = () => {
         </div>
         <div>
         {
-          !isUpdate ? <button className='btn btn-primary' onClick={()=>handleSave()}>Save</button>
+          !isUpdate ? <button className='btn btn-primary' onClick={(e)=>handleSave(e)}>Save</button>
           :
           <button className='btn btn-primary' onClick={()=>handleUpdate()}>Update</button>
         }
